@@ -8,10 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,8 +45,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import coil.compose.AsyncImage
 import com.example.recipesapp.api.Meal
+import com.example.recipesapp.canadian.Canadian
 import com.example.recipesapp.navigation.Entry
 import com.example.recipesapp.ui.theme.RecipesAppTheme
 import java.time.Instant
@@ -54,11 +61,127 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             RecipesAppTheme {
                 Entry()
             }
         }
+    }
+}
+
+@Composable
+fun CanadianItem(meal: com.example.recipesapp.canadian.Meal) {
+    var like by remember {
+        mutableStateOf(false)
+    }
+    Card(
+        modifier = Modifier
+            .padding(5.dp)
+            .width(344.dp)
+            .height(64.dp),
+        elevation = CardDefaults.cardElevation(5.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0XFF373737))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp), contentAlignment = Alignment.Center
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                AsyncImage(
+                    model = meal.strMealThumb, contentDescription = "", modifier = Modifier
+                        .width(66.dp)
+                        .height(54.dp)
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = meal.strMeal,
+                        color = Color.White,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Row {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "",
+                            tint = Color(0XFFFF6B00)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "",
+                            tint = Color(0XFFFF6B00)
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "",
+                            tint = Color(0XFFFF6B00)
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.Star,
+                            contentDescription = "",
+                            tint = Color(0XFFFF6B00)
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier.padding(end = 5.dp),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Icon(
+                        imageVector = if (like)Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "",
+                        modifier = Modifier.clickable { like=!like },
+                        tint = Color(0XFFFF6B00)
+                    )
+
+                    val date = timestampToTimes(System.currentTimeMillis())
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.clock),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(13.dp)
+                                .height(16.dp)
+                        )
+                        Text(
+                            text = date,
+                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontWeight = FontWeight.Medium, color = Color(0XFFFF6B00)
+                        )
+                    }
+
+                }
+
+            }
+        }
+    }
+}
+
+fun timestampToTimes(timestamp: Long): String {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val instant = Instant.ofEpochMilli(timestamp)
+        val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        return localDateTime.format(formatter)
+    } else {
+
+        return "No data Found"
     }
 }
 
@@ -109,23 +232,22 @@ fun IndianItem(meal: Meal, isIndian: Boolean) {
                 color = Color(0XFF2958FF)
             )
 
-            if (star){
+            if (star) {
                 Icon(
-                    imageVector =  Icons.Filled.Favorite ,
+                    imageVector = Icons.Filled.Favorite,
                     contentDescription = "",
                     modifier = Modifier
-                        .clickable { star=!star }
+                        .clickable { star = !star }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
                     tint = Color(0XFFFF6B00)
                 )
-            }
-            else{
+            } else {
                 Icon(
-                    imageVector =  Icons.Outlined.FavoriteBorder ,
+                    imageVector = Icons.Outlined.FavoriteBorder,
                     contentDescription = "",
                     modifier = Modifier
-                        .clickable { star=!star }
+                        .clickable { star = !star }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
                     tint = Color(0XFFFF6B00)

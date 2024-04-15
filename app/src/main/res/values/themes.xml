@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.RecipesApp" parent="android:Theme.Material.Light.NoActionBar" />
+
+  <style name="Base.Theme.SplashScreen." parent="Theme.SplashScreen">
+      <item name="windowSplashScreenBackground">#D12626</item>
+      <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/logo</item>
+      <item name="postSplashScreenTheme">@style/Theme.RecipesApp</item>
+  </style>
+
 </resources>

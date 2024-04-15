@@ -3,6 +3,8 @@ package com.example.recipesapp.homescreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.FilterAlt
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -38,12 +46,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipesapp.CanadianItem
 import com.example.recipesapp.IndianItem
 import com.example.recipesapp.R
 import com.example.recipesapp.api.Indian
 import com.example.recipesapp.api.MainViewModel
 import com.example.recipesapp.api.Repository
 import com.example.recipesapp.api.ResultState
+import com.example.recipesapp.canadian.Canadian
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,54 +96,70 @@ fun HomeScreen() {
             indianData = success
         }
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(title = {
 
-            }, colors = TopAppBarDefaults.topAppBarColors(Color(0XFF1E1E1E)),
-                navigationIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.navigationicon),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop, modifier = Modifier
-                            .padding(20.dp)
-                            .width(25.dp)
-                            .height(26.dp)
-                    )
-                },
-                actions = {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "",
-                        tint = Color.White, modifier = Modifier
-                            .padding(end = 20.dp)
-                            .width(30.dp)
-                            .height(35.dp)
-                    )
-                }
-            )
+    var canadianData by remember {
+        mutableStateOf<Canadian?>(null)
+    }
+    var isCanadian by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = isIndian) {
+        viewModel.getCanadian()
+    }
+    val canadianState by viewModel.allCanadian.collectAsState()
+    when (canadianState) {
+        is ResultState.Error -> {
+            isCanadian = false
+            val error = (canadianState as ResultState.Error).error
+            Text(text = error.toString())
         }
-    ) {
-        Surface(
+
+        is ResultState.Loading -> {
+            isCanadian = true
+        }
+
+        is ResultState.Success -> {
+            isCanadian = false
+            val success = (canadianState as ResultState.Success).success
+            canadianData = success
+        }
+    }
+    Scaffold(topBar = {
+        TopAppBar(title = {
+
+        }, colors = TopAppBarDefaults.topAppBarColors(Color(0XFF1E1E1E)), navigationIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.navigationicon),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(20.dp)
+                    .width(25.dp)
+                    .height(26.dp)
+            )
+        }, actions = {
+            Icon(
+                imageVector = Icons.Filled.Notifications,
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier
+                    .padding(end = 20.dp)
+                    .width(30.dp)
+                    .height(35.dp)
+            )
+        })
+    }) {
+        val scrollState = rememberScrollState()
+        Column(
             modifier = Modifier
+                .verticalScroll(scrollState)
                 .fillMaxSize()
                 .padding(top = it.calculateTopPadding())
                 .background(Color(0XFF1E1E1E)),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
-            LazyRow(
-                modifier = Modifier
-                    .background(Color(0XFF1E1E1E)),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                indianData?.meals?.let { indian ->
-                    items(indian) { fav ->
-                        IndianItem(meal = fav, isIndian)
-                    }
-                }
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -175,9 +201,135 @@ fun HomeScreen() {
                 )
             }
 
-            OutlinedTextField(value = textField, onValueChange = {
-                textField=it
-            })
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 50.dp, start = 20.dp),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                OutlinedTextField(
+                    value = textField,
+                    onValueChange = {
+                        textField = it
+                    },
+                    modifier = Modifier.background(Color(0XFF1E1E1E)),
+                    placeholder = {
+                        Text(
+                            text = "Search Recipe",
+                            color = Color.White,
+                            fontSize = MaterialTheme.typography.labelSmall.fontSize
+                        )
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedPlaceholderColor = Color.White,
+                        unfocusedPlaceholderColor = Color.White,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        containerColor = Color(0XFF1E1E1E),
+                        cursorColor = Color.White,
+                        unfocusedIndicatorColor = Color.White,
+                        focusedIndicatorColor = Color.White
+
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .width(23.dp)
+                                .height(20.dp),
+                            tint = Color.White
+                        )
+                    },
+
+                    )
+                Icon(
+                    imageVector = Icons.Outlined.FilterAlt,
+                    contentDescription = "",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(top = 8.dp, start = 5.dp)
+                        .width(45.dp)
+                        .height(45.dp)
+                )
+
+
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, bottom = 1.dp, top = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Today’s Fresh Recipe",
+                    color = Color.White,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "See All",
+                    color = Color(0XFFFF6B00),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+
+                    )
+
+            }
+            LazyRow(
+                modifier = Modifier.background(Color(0XFF1E1E1E)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                indianData?.meals?.let { indian ->
+                    items(indian) { fav ->
+                        IndianItem(meal = fav, isIndian)
+                    }
+                }
+            }
+
+
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Recommended",
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold, color = Color.White
+                )
+
+                Text(
+                    text = "See All",
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.ExtraBold, color = Color(0XFFFF6B00)
+                )
+            }
+            LazyColumn(
+                modifier =
+                Modifier
+                    .padding(bottom = 55.dp)
+                    .fillMaxWidth()
+                    .height(1000.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                canadianData?.meals?.let { can ->
+                    items(can) { hm ->
+                        CanadianItem(meal = hm)
+                    }
+                }
+            }
+
+
         }
     }
 }
