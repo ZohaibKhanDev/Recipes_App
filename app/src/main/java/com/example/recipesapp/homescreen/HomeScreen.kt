@@ -40,11 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.room.Room
 import com.example.recipesapp.CanadianItem
 import com.example.recipesapp.IndianItem
 import com.example.recipesapp.R
@@ -53,17 +55,26 @@ import com.example.recipesapp.api.MainViewModel
 import com.example.recipesapp.api.Repository
 import com.example.recipesapp.api.ResultState
 import com.example.recipesapp.canadian.Canadian
+import com.example.recipesapp.database.MyDataBase
 import com.example.recipesapp.detail.Detail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
 
+    val context= LocalContext.current
+    val db= Room.databaseBuilder(
+        context,
+        MyDataBase::class.java,
+        "demo.db"
+
+    ).allowMainThreadQueries()
+        .build()
     var textField by remember {
         mutableStateOf("")
     }
     val repository = remember {
-        Repository()
+        Repository(db)
     }
     val viewModel = remember {
         MainViewModel(repository)

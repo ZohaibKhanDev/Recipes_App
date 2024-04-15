@@ -44,9 +44,6 @@ fun Navigation(navController: NavHostController) {
         composable(Screen.Favourite.route) {
             FavScreen()
         }
-        composable(Screen.Setting.route) {
-            SettingScreen()
-        }
         composable(
             Screen.Detail.route + "/{image}/{tittle}/{des}",
             arguments = listOf(
@@ -95,11 +92,6 @@ fun FavScreen() {
     Text(text = "Fav")
 }
 
-@Composable
-fun SettingScreen() {
-
-    Text(text = "SettingScreen")
-}
 
 sealed class Screen(
     val tittle: String,
@@ -129,12 +121,7 @@ sealed class Screen(
         unselectedIcon = Icons.Outlined.Favorite
     )
 
-    object Setting : Screen(
-        "Setting",
-        "Setting",
-        selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Outlined.Settings
-    )
+
 
     object Detail : Screen(
         "Detail",
@@ -150,7 +137,7 @@ fun BottomNavigation(navController: NavController) {
         Screen.Home,
         Screen.Canadian,
         Screen.Favourite,
-        Screen.Setting
+
     )
 
     NavigationBar(containerColor = Color(0XFF1E1E1E)) {
