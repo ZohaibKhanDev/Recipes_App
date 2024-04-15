@@ -1,6 +1,7 @@
 package com.example.recipesapp
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,14 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
@@ -46,10 +44,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.recipesapp.api.Meal
-import com.example.recipesapp.canadian.Canadian
 import com.example.recipesapp.navigation.Entry
+import com.example.recipesapp.navigation.Screen
 import com.example.recipesapp.ui.theme.RecipesAppTheme
 import java.time.Instant
 import java.time.LocalDateTime
@@ -71,22 +70,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CanadianItem(meal: com.example.recipesapp.canadian.Meal) {
+fun CanadianItem(meal: com.example.recipesapp.canadian.Meal, navController: NavController) {
     var like by remember {
         mutableStateOf(false)
     }
-    Card(
-        modifier = Modifier
-            .padding(5.dp)
-            .width(344.dp)
-            .height(64.dp),
+    Card(modifier = Modifier
+        .clickable { navController.navigate(Screen.Detail.route + "/${Uri.encode(meal.strMealThumb)}/${meal.strMeal}/${meal.idMeal}") }
+        .padding(5.dp)
+        .width(344.dp)
+        .height(64.dp),
         elevation = CardDefaults.cardElevation(5.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0XFF373737))
-    ) {
+        colors = CardDefaults.cardColors(containerColor = Color(0XFF373737))) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp), contentAlignment = Alignment.Center
+                .padding(top = 4.dp),
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -94,7 +93,9 @@ fun CanadianItem(meal: com.example.recipesapp.canadian.Meal) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AsyncImage(
-                    model = meal.strMealThumb, contentDescription = "", modifier = Modifier
+                    model = meal.strMealThumb,
+                    contentDescription = "",
+                    modifier = Modifier
                         .width(66.dp)
                         .height(54.dp)
                 )
@@ -139,9 +140,9 @@ fun CanadianItem(meal: com.example.recipesapp.canadian.Meal) {
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Icon(
-                        imageVector = if (like)Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (like) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "",
-                        modifier = Modifier.clickable { like=!like },
+                        modifier = Modifier.clickable { like = !like },
                         tint = Color(0XFFFF6B00)
                     )
 
@@ -162,7 +163,8 @@ fun CanadianItem(meal: com.example.recipesapp.canadian.Meal) {
                         Text(
                             text = date,
                             fontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            fontWeight = FontWeight.Medium, color = Color(0XFFFF6B00)
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0XFFFF6B00)
                         )
                     }
 
@@ -186,12 +188,13 @@ fun timestampToTimes(timestamp: Long): String {
 }
 
 @Composable
-fun IndianItem(meal: Meal, isIndian: Boolean) {
+fun IndianItem(meal: Meal, isIndian: Boolean, navController: NavController) {
     var star by remember {
         mutableStateOf(false)
     }
     Card(
         modifier = Modifier
+            .clickable { navController.navigate(Screen.Detail.route + "/${Uri.encode(meal.strMealThumb)}/${meal.strMeal}/${meal.idMeal}") }
             .padding(10.dp)
             .width(168.dp)
             .height(216.dp)
@@ -202,7 +205,8 @@ fun IndianItem(meal: Meal, isIndian: Boolean) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0XFF707070)), contentAlignment = Alignment.Center
+                .background(Color(0XFF707070)),
+            contentAlignment = Alignment.Center
         ) {
             AsyncImage(
                 model = meal.strMealThumb,
@@ -233,25 +237,21 @@ fun IndianItem(meal: Meal, isIndian: Boolean) {
             )
 
             if (star) {
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
+                Icon(imageVector = Icons.Filled.Favorite,
                     contentDescription = "",
                     modifier = Modifier
                         .clickable { star = !star }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
-                    tint = Color(0XFFFF6B00)
-                )
+                    tint = Color(0XFFFF6B00))
             } else {
-                Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
+                Icon(imageVector = Icons.Outlined.FavoriteBorder,
                     contentDescription = "",
                     modifier = Modifier
                         .clickable { star = !star }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
-                    tint = Color(0XFFFF6B00)
-                )
+                    tint = Color(0XFFFF6B00))
             }
 
             Image(
@@ -271,7 +271,8 @@ fun IndianItem(meal: Meal, isIndian: Boolean) {
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(top = 80.dp, start = 20.dp),
-                fontSize = MaterialTheme.typography.labelSmall.fontSize, color = Color(0XFFFF6B00)
+                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                color = Color(0XFFFF6B00)
             )
 
             Icon(

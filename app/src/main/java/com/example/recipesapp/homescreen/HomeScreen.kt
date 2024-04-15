@@ -3,7 +3,6 @@ package com.example.recipesapp.homescreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
@@ -46,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.recipesapp.CanadianItem
 import com.example.recipesapp.IndianItem
 import com.example.recipesapp.R
@@ -54,10 +53,12 @@ import com.example.recipesapp.api.MainViewModel
 import com.example.recipesapp.api.Repository
 import com.example.recipesapp.api.ResultState
 import com.example.recipesapp.canadian.Canadian
+import com.example.recipesapp.detail.Detail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
+
     var textField by remember {
         mutableStateOf("")
     }
@@ -73,9 +74,16 @@ fun HomeScreen() {
     var isIndian by remember {
         mutableStateOf(false)
     }
+    var canadianData by remember {
+        mutableStateOf<Canadian?>(null)
+    }
+    var isCanadian by remember {
+        mutableStateOf(false)
+    }
 
-    LaunchedEffect(key1 = isIndian) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.getCountry()
+        viewModel.getCanadian()
     }
 
     val state by viewModel.allCountry.collectAsState()
@@ -97,16 +105,6 @@ fun HomeScreen() {
         }
     }
 
-    var canadianData by remember {
-        mutableStateOf<Canadian?>(null)
-    }
-    var isCanadian by remember {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(key1 = isIndian) {
-        viewModel.getCanadian()
-    }
     val canadianState by viewModel.allCanadian.collectAsState()
     when (canadianState) {
         is ResultState.Error -> {
@@ -125,9 +123,10 @@ fun HomeScreen() {
             canadianData = success
         }
     }
+
+
     Scaffold(topBar = {
         TopAppBar(title = {
-
         }, colors = TopAppBarDefaults.topAppBarColors(Color(0XFF1E1E1E)), navigationIcon = {
             Image(
                 painter = painterResource(id = R.drawable.navigationicon),
@@ -286,7 +285,7 @@ fun HomeScreen() {
             ) {
                 indianData?.meals?.let { indian ->
                     items(indian) { fav ->
-                        IndianItem(meal = fav, isIndian)
+                        IndianItem(meal = fav, isIndian,navController)
                     }
                 }
             }
@@ -324,7 +323,7 @@ fun HomeScreen() {
             ) {
                 canadianData?.meals?.let { can ->
                     items(can) { hm ->
-                        CanadianItem(meal = hm)
+                        CanadianItem(meal = hm,navController)
                     }
                 }
             }

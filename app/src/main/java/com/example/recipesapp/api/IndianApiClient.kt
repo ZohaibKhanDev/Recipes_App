@@ -2,6 +2,7 @@ package com.example.recipesapp.api
 
 import com.example.recipesapp.api.Constant.TIMEOUT
 import com.example.recipesapp.canadian.Canadian
+import com.example.recipesapp.detail.Detail
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -52,6 +53,10 @@ object IndianApiClient {
 
     suspend fun Indian(): Indian {
         return client.get("https://themealdb.com/api/json/v1/1/filter.php?a=Indian").body()
+    }
+
+    suspend fun Details(id:String):Detail{
+        return client.get("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$id").body()
     }
 
 }
