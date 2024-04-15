@@ -3,6 +3,8 @@ package com.example.recipesapp.homescreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,7 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.recipesapp.IndianItem
 import com.example.recipesapp.R
 import com.example.recipesapp.api.Indian
@@ -43,6 +48,9 @@ import com.example.recipesapp.api.ResultState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
+    var textField by remember {
+        mutableStateOf("")
+    }
     val repository = remember {
         Repository()
     }
@@ -88,6 +96,7 @@ fun HomeScreen() {
                         painter = painterResource(id = R.drawable.navigationicon),
                         contentDescription = "",
                         contentScale = ContentScale.Crop, modifier = Modifier
+                            .padding(20.dp)
                             .width(25.dp)
                             .height(26.dp)
                     )
@@ -97,6 +106,7 @@ fun HomeScreen() {
                         imageVector = Icons.Filled.Notifications,
                         contentDescription = "",
                         tint = Color.White, modifier = Modifier
+                            .padding(end = 20.dp)
                             .width(30.dp)
                             .height(35.dp)
                     )
@@ -110,6 +120,8 @@ fun HomeScreen() {
                 .padding(top = it.calculateTopPadding())
                 .background(Color(0XFF1E1E1E)),
         ) {
+
+
             LazyRow(
                 modifier = Modifier
                     .background(Color(0XFF1E1E1E)),
@@ -122,6 +134,50 @@ fun HomeScreen() {
                     }
                 }
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Welcome",
+                    color = Color.White,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Denny",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    color = Color(0XFFFF6B00)
+                )
+
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 28.dp),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "What would you like\n" +
+
+                            "to cook today?",
+                    color = Color(0XFFFF6B00),
+                    lineHeight = 36.sp,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+
+            OutlinedTextField(value = textField, onValueChange = {
+                textField=it
+            })
         }
     }
 }
