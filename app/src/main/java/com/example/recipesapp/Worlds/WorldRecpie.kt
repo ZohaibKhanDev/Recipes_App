@@ -127,38 +127,29 @@ fun WorldScreen(navController: NavController) {
                 )
             })
     }) {
-      /*  if (isWorld){
+       /*if (isWorld){
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                 CircularProgressIndicator()
             }
         }*/
-        /*LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxWidth().padding(top = it.calculateTopPadding()),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            worldData?.results?.let { results ->
-                items(results) { fa ->
-                    WorldItem(result = fa, navController = navController)
-                }
-            }
-        }*/
+
+           LazyVerticalGrid(
+               columns = GridCells.Fixed(2),
+               modifier = Modifier.fillMaxWidth().background(Color(0XFF000000)).padding(top = it.calculateTopPadding()),
+               verticalArrangement = Arrangement.SpaceBetween,
+               horizontalArrangement = Arrangement.Center
+           ) {
+               worldData?.results?.let { results ->
+                   items(results) { fa ->
+                       WorldItem(result = fa, navController = navController)
+                   }
+               }
+           }
 
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = it.calculateTopPadding()).background(Color(0XFF000000)),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            worldData?.results?.let { resultList ->
-                items(resultList) { fv ->
-                    WorldItem(result = fv, navController = navController)
-                }
-            }
-        }
+
+
+
     }
 }
 
@@ -188,7 +179,7 @@ fun WorldItem(result: Result, navController: NavController) {
 
     Card(
         modifier = Modifier
-            .clickable { navController.navigate(Screen.Detail.route + "/${Uri.encode(result.thumbnailUrl)}/${result.name}/${result.description}") }
+            .clickable { navController.navigate(Screen.WorldDetail.route + "/${Uri.encode(result.thumbnailUrl)}/${result.name}/${result.description}") }
             .padding(10.dp)
             .width(168.dp)
             .height(216.dp)
@@ -224,7 +215,7 @@ fun WorldItem(result: Result, navController: NavController) {
                 text = "Dinner",
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 9.dp, bottom = 23.dp),
+                    .padding(start = 9.dp, bottom = 35.dp),
                 fontSize = MaterialTheme.typography.labelSmall.fontSize,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0XFF2958FF)

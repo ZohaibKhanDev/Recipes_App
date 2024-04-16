@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Notifications
@@ -47,11 +49,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -177,29 +183,66 @@ fun HomeScreen(navController: NavController) {
             searchData = success
         }
     }
-
+    var notification by remember {
+        mutableStateOf(false)
+    }
+    var dashBoard by remember {
+        mutableStateOf(false)
+    }
     Scaffold(topBar = {
         TopAppBar(title = {
         }, colors = TopAppBarDefaults.topAppBarColors(Color(0XFF1E1E1E)), navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.navigationicon),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(20.dp)
-                    .width(25.dp)
-                    .height(26.dp)
-            )
+            if(dashBoard){
+                Image(
+                    painter = painterResource(id = R.drawable.navigationicon),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clickable { dashBoard=!dashBoard }
+                        .padding(20.dp)
+                        .width(25.dp)
+                        .height(26.dp), colorFilter = ColorFilter.tint(color = Color(0XFFFF6B00), blendMode = BlendMode.Color)
+                )
+            }
+            else{
+                Image(
+                    painter = painterResource(id = R.drawable.navigationicon),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clickable { dashBoard=!dashBoard }
+                        .padding(20.dp)
+                        .width(25.dp)
+                        .height(26.dp)
+                )
+            }
+
         }, actions = {
-            Icon(
-                imageVector = Icons.Filled.Notifications,
-                contentDescription = "",
-                tint = Color.White,
-                modifier = Modifier
-                    .padding(end = 20.dp)
-                    .width(30.dp)
-                    .height(35.dp)
-            )
+            if(notification){
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = "",
+                    tint = Color(0XFFFF6B00),
+                    modifier = Modifier
+                        .clickable { notification = !notification }
+                        .padding(end = 20.dp)
+                        .width(30.dp)
+                        .height(35.dp)
+                )
+            }
+            else{
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = "",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .clickable { notification = !notification }
+                        .padding(end = 20.dp)
+                        .width(30.dp)
+                        .height(35.dp)
+                )
+            }
+
         })
     }) {
         if(isSearch){
@@ -269,6 +312,7 @@ fun HomeScreen(navController: NavController) {
                         value = textField,
                         onValueChange = {
                             textField = it
+                            viewModel.getSearch(it)
                         },
                         modifier = Modifier.background(Color(0XFF1E1E1E)),
                         placeholder = {
@@ -289,6 +333,15 @@ fun HomeScreen(navController: NavController) {
                             focusedIndicatorColor = Color.White
 
                         ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                searchIcon = true
+                                viewModel.getSearch(textField)
+                            }
+                        ),
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Search,
@@ -300,6 +353,7 @@ fun HomeScreen(navController: NavController) {
                                 tint = Color.White
                             )
                         },
+                        singleLine = true,
 
                         )
                     Icon(

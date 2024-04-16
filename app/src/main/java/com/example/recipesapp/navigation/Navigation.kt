@@ -32,6 +32,7 @@ import com.example.recipesapp.Worlds.WorldScreen
 import com.example.recipesapp.detail.DetailScreen
 import com.example.recipesapp.fav.FavScreen
 import com.example.recipesapp.homescreen.HomeScreen
+import com.example.recipesapp.worlddetail.WorldDetail
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -67,6 +68,26 @@ fun Navigation(navController: NavHostController) {
             val des=it.arguments?.getString("des")!!
             DetailScreen(navController,image,tittle,des)
         }
+        composable(Screen.WorldDetail.route + "/{image}/{tittle}/{des}",
+            arguments = listOf(
+
+                navArgument("image") {
+                    type = NavType.StringType
+                },
+                navArgument("tittle") {
+                    type = NavType.StringType
+                },
+
+                navArgument("des") {
+                    type = NavType.StringType
+                },
+            )){
+            val image=it.arguments?.getString("image")!!
+            val tittle=it.arguments?.getString("tittle")!!
+            val des=it.arguments?.getString("des")!!
+            WorldDetail(navController,image,tittle,des)
+        }
+
     }
 }
 
@@ -101,7 +122,12 @@ sealed class Screen(
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home
     )
-
+    object WorldDetail : Screen(
+        "WorldDetail",
+        "WorldDetail",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
+    )
     object Canadian :
         Screen(
             "Canadian",

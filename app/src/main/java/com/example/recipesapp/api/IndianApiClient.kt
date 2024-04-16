@@ -67,7 +67,7 @@ object IndianApiClient {
     suspend fun WorldRecipe():World{
         return client.get("https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes"){
             headers {
-                append("X-RapidAPI-Key","0e3e36a41dmsh01f5d1b030cc6cfp103c0ejsn9c29801473d0")
+                append("X-RapidAPI-Key","65951b8989msha06ada35f2357eap14a406jsn7d21338fec93")
                 append("X-RapidAPI-Host","tasty.p.rapidapi.com")
             }
         }.body()
