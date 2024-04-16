@@ -40,13 +40,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
+import androidx.room.Room
 import coil.compose.AsyncImage
+import com.example.recipesapp.api.MainViewModel
 import com.example.recipesapp.api.Meal
+import com.example.recipesapp.api.Repository
+import com.example.recipesapp.database.Fav
+import com.example.recipesapp.database.MyDataBase
 import com.example.recipesapp.navigation.Entry
 import com.example.recipesapp.navigation.Screen
 import com.example.recipesapp.ui.theme.RecipesAppTheme
@@ -189,6 +195,23 @@ fun timestampToTimes(timestamp: Long): String {
 
 @Composable
 fun IndianItem(meal: Meal, isIndian: Boolean, navController: NavController) {
+    val context= LocalContext.current
+    val db= Room.databaseBuilder(
+        context,
+        MyDataBase::class.java,
+        "demo.db"
+
+    ).allowMainThreadQueries()
+        .build()
+    var textField by remember {
+        mutableStateOf("")
+    }
+    val repository = remember {
+        Repository(db)
+    }
+    val viewModel = remember {
+        MainViewModel(repository)
+    }
     var star by remember {
         mutableStateOf(false)
     }
@@ -240,7 +263,9 @@ fun IndianItem(meal: Meal, isIndian: Boolean, navController: NavController) {
                 Icon(imageVector = Icons.Filled.Favorite,
                     contentDescription = "",
                     modifier = Modifier
-                        .clickable { star = !star }
+                        .clickable {
+                            star = !star
+                        }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
                     tint = Color(0XFFFF6B00))
@@ -248,7 +273,11 @@ fun IndianItem(meal: Meal, isIndian: Boolean, navController: NavController) {
                 Icon(imageVector = Icons.Outlined.FavoriteBorder,
                     contentDescription = "",
                     modifier = Modifier
-                        .clickable { star = !star }
+                        .clickable {
+                            val fav=Fav(null,meal.strMealThumb,meal.strMeal,meal.idMeal)
+                            viewModel.Insert(fav)
+                            star = !star
+                        }
                         .align(Alignment.TopStart)
                         .padding(top = 9.dp, start = 10.dp),
                     tint = Color(0XFFFF6B00))

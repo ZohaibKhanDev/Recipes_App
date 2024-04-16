@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.recipesapp.detail.DetailScreen
+import com.example.recipesapp.fav.FavScreen
 import com.example.recipesapp.homescreen.HomeScreen
 
 @Composable
@@ -39,10 +40,10 @@ fun Navigation(navController: NavHostController) {
             HomeScreen(navController)
         }
         composable(Screen.Canadian.route) {
-            CanadianScreen()
+            CanadianScreen(navController)
         }
         composable(Screen.Favourite.route) {
-            FavScreen()
+            FavScreen(navController)
         }
         composable(
             Screen.Detail.route + "/{image}/{tittle}/{des}",
@@ -83,14 +84,11 @@ fun Entry() {
 }
 
 @Composable
-fun CanadianScreen() {
+fun CanadianScreen(navController: NavController) {
     Text(text = "CandianScreen")
 }
 
-@Composable
-fun FavScreen() {
-    Text(text = "Fav")
-}
+
 
 
 sealed class Screen(
