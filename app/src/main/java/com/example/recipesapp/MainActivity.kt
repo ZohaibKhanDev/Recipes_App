@@ -49,15 +49,19 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.room.Room
 import coil.compose.AsyncImage
-import com.example.recipesapp.api.MainViewModel
-import com.example.recipesapp.api.Meal
-import com.example.recipesapp.api.Repository
-import com.example.recipesapp.canadian.MealX
-import com.example.recipesapp.database.Fav
-import com.example.recipesapp.database.MyDataBase
-import com.example.recipesapp.navigation.Entry
-import com.example.recipesapp.navigation.Screen
+import com.example.recipesapp.presentation.viewmodel.MainViewModel
+import com.example.recipesapp.domain.model.indian.Meal
+import com.example.recipesapp.domain.repository.Repository
+import com.example.recipesapp.domain.model.canadian.MealX
+import com.example.recipesapp.domain.model.favourite.Fav
+import com.example.recipesapp.data.local.db.MyDataBase
+import com.example.recipesapp.di.appModule
+import com.example.recipesapp.presentation.ui.navigation.Entry
+import com.example.recipesapp.presentation.ui.navigation.Screen
 import com.example.recipesapp.ui.theme.RecipesAppTheme
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -71,6 +75,11 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             RecipesAppTheme {
+                startKoin {
+                    androidContext(this@MainActivity)
+                    androidLogger()
+                    modules(appModule)
+                }
                 Entry()
             }
         }
