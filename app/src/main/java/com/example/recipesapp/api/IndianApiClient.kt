@@ -1,8 +1,11 @@
 package com.example.recipesapp.api
 
+import Canadian
+import androidx.room.Query
+import com.example.recipesapp.Worlds.World
 import com.example.recipesapp.api.Constant.TIMEOUT
-import com.example.recipesapp.canadian.Canadian
 import com.example.recipesapp.detail.Detail
+import com.example.recipesapp.search.Search
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -12,6 +15,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -47,7 +52,7 @@ object IndianApiClient {
         }
     }
 
-    suspend fun Canadian():Canadian{
+   suspend fun Canadian(): Canadian {
         return client.get("https://themealdb.com/api/json/v1/1/filter.php?a=Canadian").body()
     }
 
@@ -57,6 +62,19 @@ object IndianApiClient {
 
     suspend fun Details(id:String):Detail{
         return client.get("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$id").body()
+    }
+
+    suspend fun WorldRecipe():World{
+        return client.get("https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes"){
+            headers {
+                append("X-RapidAPI-Key","0e3e36a41dmsh01f5d1b030cc6cfp103c0ejsn9c29801473d0")
+                append("X-RapidAPI-Host","tasty.p.rapidapi.com")
+            }
+        }.body()
+    }
+
+    suspend fun Search(query: String):Search{
+        return client.get("https://themealdb.com/api/json/v1/1/search.php?s=${query}").body()
     }
 
 }

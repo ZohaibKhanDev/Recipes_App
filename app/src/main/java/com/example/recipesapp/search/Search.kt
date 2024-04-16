@@ -1,9 +1,11 @@
-import com.example.recipesapp.canadian.MealX
+package com.example.recipesapp.search
+
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Canadian(
+data class Search(
     @SerialName("meals")
-    val meals: List<MealX>
+    val meals: List<Meal>
 )

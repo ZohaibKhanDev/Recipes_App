@@ -107,7 +107,7 @@ fun FavScreen(navController: NavController) {
 
         is ResultState.Success -> {
             isFav = false
-            val success = (state as ResultState.Success).success
+            val success = (state as ResultState.Success).response
             favData = success
         }
     }

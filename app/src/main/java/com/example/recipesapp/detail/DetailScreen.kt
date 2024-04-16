@@ -92,7 +92,7 @@ fun DetailScreen(navController: NavController, image: String, tittle: String, de
 
         is ResultState.Success -> {
             isDetail = false
-            val success = (detailState as ResultState.Success).success
+            val success = (detailState as ResultState.Success).response
             detailData = success
         }
     }
