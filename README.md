@@ -3,14 +3,12 @@
 
 
 ## 🚀 Key Features
-- **All Wallpaper**
+- **All Recipe**
 - **Fav Option**
 - **Sharing Options**
 - **Catagerys**
-- **Download Option**
 - **Comprehensive Search**
-- **set wallpaper**
-- **Trending Wallpaper**
+- **Trending Recipe**
 
 
 ## 🤝 Connect with Me
