@@ -13,6 +13,7 @@
 - **Nutritional Information**
 - **Step-by-Step Instructions**
 - **Meal Planning**
+- **User Reviews**
 
 
 ## 🤝 Connect with Me
