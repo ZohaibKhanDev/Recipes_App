@@ -15,6 +15,7 @@
 - **Meal Planning**
 - **User Reviews**
 - **Cooking Timers**
+- **Shopping List**
   
 
 
