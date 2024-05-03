@@ -14,6 +14,8 @@
 - **Step-by-Step Instructions**
 - **Meal Planning**
 - **User Reviews**
+- **Cooking Timers**
+  
 
 
 ## 🤝 Connect with Me
