@@ -16,6 +16,7 @@
 - **User Reviews**
 - **Cooking Timers**
 - **Shopping List**
+- **Dietary Filters**
   
 
 
