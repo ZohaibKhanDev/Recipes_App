@@ -9,6 +9,7 @@
 - **Catagerys**
 - **Comprehensive Search**
 - **Trending Recipe**
+- **Ingredient Search**
 
 
 ## 🤝 Connect with Me
