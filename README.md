@@ -10,6 +10,7 @@
 - **Comprehensive Search**
 - **Trending Recipe**
 - **Ingredient Search**
+- **Nutritional Information**
 
 
 ## 🤝 Connect with Me
