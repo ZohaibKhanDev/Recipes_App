@@ -11,6 +11,7 @@
 - **Trending Recipe**
 - **Ingredient Search**
 - **Nutritional Information**
+- **Step-by-Step Instructions**
 
 
 ## 🤝 Connect with Me
