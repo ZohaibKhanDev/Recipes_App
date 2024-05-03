@@ -12,6 +12,7 @@
 - **Ingredient Search**
 - **Nutritional Information**
 - **Step-by-Step Instructions**
+- **Meal Planning**
 
 
 ## 🤝 Connect with Me
