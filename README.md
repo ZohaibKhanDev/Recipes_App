@@ -17,7 +17,20 @@
 - **Cooking Timers**
 - **Shopping List**
 - **Dietary Filters**
-  
+- **All Recipe**
+- **Fav Option**
+- **Sharing Options**
+- **Catagerys**
+- **Comprehensive Search**
+- **Trending Recipe**
+- **Ingredient Search**
+- **Nutritional Information**
+- **Step-by-Step Instructions**
+- **Meal Planning**
+- **User Reviews**
+- **Cooking Timers**
+- **Shopping List**
+- **Dietary Filters**
 
 
 ## 🤝 Connect with Me
