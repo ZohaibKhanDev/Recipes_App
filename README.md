@@ -1,7 +1,6 @@
 # Wallpaper App
 ## Overview
 
-........
 
 ## 🚀 Key Features
 - **All Recipe**
