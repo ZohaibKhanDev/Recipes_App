@@ -1,6 +1,6 @@
 # Recipes App
 ## Overview
-........
+
 ## 🚀 Key Features
 - **All Recipe**
 - **Fav Option**
