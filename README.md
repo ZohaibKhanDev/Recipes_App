@@ -1,5 +1,5 @@
 # Recipes App
-## Overview 
+## Overview
  
 ## 🚀 Key Features
 - **All Recipe**
